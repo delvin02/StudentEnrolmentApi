@@ -34,13 +34,13 @@ const databaseConfig: DatabaseConfig = {
     |
     */
     mysql: {
-      client: 'mysql',
+      client: 'mysql2',
       connection: {
-        host: Env.get('DB_HOST', '127.0.0.1'),
-        port: Env.get('DB_PORT', '3306'),
-        user: Env.get('DB_USER', 'root'),
-        password: Env.get('DB_PASSWORD', 'password'),
-        database: Env.get('DB_DATABASE', 'lucid'),
+        host: Env.get('MYSQL_HOST'),
+        port: Env.get('MYSQL_PORT'),
+        user: Env.get('MYSQL_USER'),
+        password: Env.get('MYSQL_PASSWORD', ''),
+        database: Env.get('MYSQL_DB_NAME'),
       },
       migrations: {
         naturalSort: true,

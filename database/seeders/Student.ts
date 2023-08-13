@@ -5,8 +5,12 @@ export default class extends BaseSeeder {
   public async run() {
     // Write your database queries inside the run method
     await Student.createMany([
-      { firstName: 'John', lastName: 'Doe', email: 'john@example.com' },
-      { firstName: 'Jane', lastName: 'Smith', email: 'jane@example.com' },
+      {
+        first_name: 'hello',
+        last_name: 'St',
+        email: 'asdsa@gmail.com',
+        age: 18,
+      },
     ])
   }
 }

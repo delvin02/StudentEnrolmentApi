@@ -5,14 +5,17 @@ export default class Student extends BaseModel {
   @column({ isPrimary: true })
   public id: number
 
-  @column({ columnName: 'first_name' })
-  public firstName: string
+  @column()
+  public first_name: string
 
-  @column({ columnName: 'last_name' })
-  public lastName: string
+  @column()
+  public last_name: string
 
-  @column({ columnName: 'email' })
+  @column()
   public email: string
+
+  @column()
+  public age: number
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime

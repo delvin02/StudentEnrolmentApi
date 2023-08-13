@@ -25,4 +25,4 @@ Route.get('/', async () => {
 })
 
 // Only index function will be inlcuded
-Route.resource('/students', 'StudentController.index').apiOnly()
+Route.resource('/students', 'StudentsController').only(['index'])

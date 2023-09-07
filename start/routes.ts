@@ -25,4 +25,10 @@ Route.get('/', async () => {
 })
 
 // Only index function will be inlcuded
-Route.resource('/students', 'StudentsController').only(['index'])
+Route.group(() => {
+  Route.get('/students', 'StudentsController.index')
+  Route.get('/students/:id', 'StudentsController.show')
+  Route.post('/students', 'StudentsController.store')
+  Route.patch('/students/:id', 'StudentsController.update')
+  Route.delete('/students/:id', 'StudentsController.destroy')
+}).prefix('api/v1')

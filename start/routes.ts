@@ -24,11 +24,19 @@ Route.get('/', async () => {
   return { hello: 'world' }
 })
 
+
 // Only index function will be inlcuded
 Route.group(() => {
-  Route.get('/students', 'StudentsController.index')
-  Route.get('/students/:id', 'StudentsController.show')
-  Route.post('/students', 'StudentsController.store')
-  Route.patch('/students/:id', 'StudentsController.update')
-  Route.delete('/students/:id', 'StudentsController.destroy')
+  Route.post('login', 'AuthController.login')
+  Route.post('register', 'AuthController.register')
+
+  Route.group(() => {
+    Route.get('/students', 'StudentsController.index')
+    Route.get('/students/:id', 'StudentsController.show')
+    Route.post('/students', 'StudentsController.store')
+    Route.put('/students/:id', 'StudentsController.edit')
+    Route.patch('/students/:id', 'StudentsController.update')
+    Route.delete('/students/:id', 'StudentsController.destroy')
+  }).middleware('auth:api')
 }).prefix('api/v1')
+

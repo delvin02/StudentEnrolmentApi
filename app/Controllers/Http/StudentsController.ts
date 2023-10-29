@@ -17,6 +17,13 @@ export default class StudentsController {
   public async store({ request, response }: HttpContextContract) {
     try {
       const studentData = request.only(['first_name', 'last_name', 'email', 'age'])
+
+      // email check
+      const existingStudent = await Student.findBy('email', studentData.email)
+      if (existingStudent) {
+        return response.status(400).json({ message: 'Student with this email alraedy exists' })
+      }
+
       const student = await Student.create(studentData)
 
       return response.status(201).json(student)
@@ -39,7 +46,31 @@ export default class StudentsController {
     }
   }
 
-  public async edit({}: HttpContextContract) {}
+  public async edit({ params, request, response }: HttpContextContract) {
+     try {
+      const studentId = params.id
+      const student = await Student.findOrFail(studentId)
+
+      const updatedData = request.only(['first_name', 'last_name', 'email', 'age'])
+
+      // check if any of the updated fields are blank
+      if (
+        updatedData.first_name === '' ||
+        updatedData.last_name === '' ||
+        updatedData.email === '' ||
+        updatedData.age === ''
+      ) {
+        return response.status(400).json({ message: 'Updated fields cannot be blank' })
+      }
+
+      student.merge(updatedData)
+      await student.save()
+
+      return response.status(200).json(student)
+    } catch (error) {
+      return response.status(500).json({ Message: 'An error occurred: ' + error.message })
+    }
+  }
 
   public async update({ params, request, response }: HttpContextContract) {
     try {
@@ -47,6 +78,17 @@ export default class StudentsController {
       const student = await Student.findOrFail(studentId)
 
       const updatedData = request.only(['first_name', 'last_name', 'email', 'age'])
+
+      // check if any of the updated fields are blank
+      if (
+        updatedData.first_name === '' ||
+        updatedData.last_name === '' ||
+        updatedData.email === '' ||
+        updatedData.age === ''
+      ) {
+        return response.status(400).json({ message: 'Updated fields cannot be blank' })
+      }
+
       student.merge(updatedData)
       await student.save()
 
@@ -62,11 +104,14 @@ export default class StudentsController {
       const student = await Student.find(studentId)
 
       if (!student) {
-        return response.notFound({ error: 'Student not found' })
+        return response.status(404).notFound({ error: 'Student not found' })
       }
 
       await student.delete()
-      return response.ok({ message: 'Student was deleted' })
+      return response.ok({
+        id: studentId,
+        message: `Student ${studentId} deleted successfully`,
+      })
     } catch (error) {
       return response.status(500).json({ message: 'An error occurred: ' + error.message })
     }
